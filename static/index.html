@@ -360,6 +360,9 @@
             cursor: pointer;
             box-shadow: 0 3px 10px rgba(0,0,0,0.12);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* 单张图片时的特殊样式 */
@@ -416,7 +419,7 @@
         .image-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             position: relative;
             z-index: 0;
         }
@@ -570,6 +573,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 80px 20px;
         }
 
         @keyframes fadeIn {
@@ -578,10 +582,13 @@
         }
 
         .modal-content {
-            max-width: 90%;
-            max-height: 85vh;
+            max-width: 90vw;
+            max-height: calc(100vh - 160px);
+            width: auto;
+            height: auto;
             object-fit: contain;
-            border-radius: 4px;
+            border-radius: 8px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
         }
 
         .modal-close {
@@ -601,36 +608,76 @@
         }
 
         .modal-download {
-            position: absolute;
+            position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             padding: 15px 40px;
-            background: #3498db;
+            background: #667eea;
             color: #fff;
             border: none;
             border-radius: 50px;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-            z-index: 1001;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.6);
+            z-index: 1002;
+            font-weight: 600;
         }
 
         .modal-download:hover {
-            background: #2980b9;
+            background: #764ba2;
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.7);
         }
 
         .modal-info {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 30px;
             color: #fff;
             font-size: 14px;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             padding: 10px 15px;
-            border-radius: 4px;
-            z-index: 1001;
+            border-radius: 8px;
+            z-index: 1002;
+            max-width: calc(100vw - 180px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        /* 移动端模态窗口优化 */
+        @media (max-width: 768px) {
+            .modal.show {
+                padding: 60px 10px;
+            }
+
+            .modal-content {
+                max-width: 96vw;
+                max-height: calc(100vh - 120px);
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 15px;
+                font-size: 32px;
+            }
+
+            .modal-info {
+                top: 10px;
+                left: 15px;
+                font-size: 12px;
+                padding: 8px 12px;
+                max-width: calc(100vw - 100px);
+            }
+
+            .modal-download {
+                bottom: 15px;
+                padding: 12px 30px;
+                font-size: 14px;
+            }
         }
 
         .empty {
