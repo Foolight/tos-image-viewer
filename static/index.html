@@ -20,72 +20,94 @@
 
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 15px 20px;
+            padding: 10px 15px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .header h1 {
-            font-size: 22px;
-            color: #fff;
-            margin-bottom: 12px;
-            text-align: center;
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
-        .header-controls {
+        .header-left {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 12px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            gap: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            color: #fff;
+            margin: 0;
+            white-space: nowrap;
+            font-weight: 600;
         }
 
         .info-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .header .info {
-            font-size: 13px;
-            color: #555;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.95);
             font-weight: 500;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
         }
 
         .page-size-selector {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #555;
+            gap: 6px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
         }
 
         .page-size-selector label {
             font-weight: 500;
-            white-space: nowrap;
         }
 
         .page-size-selector input {
-            width: 70px;
-            padding: 6px 10px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 13px;
+            width: 50px;
+            padding: 3px 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            font-size: 12px;
             text-align: center;
             transition: all 0.2s;
+            color: #333;
+            font-weight: 600;
         }
 
         .page-size-selector input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #fff;
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .container {
@@ -132,14 +154,45 @@
 
         .image-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-size, 180px), 1fr));
+        }
+
+        /* 根据每页数量自动调整网格大小 */
+        .image-grid[data-size="small"] {
+            --grid-min-size: 150px;
+            gap: 10px;
+        }
+
+        .image-grid[data-size="medium"] {
+            --grid-min-size: 180px;
+            gap: 12px;
+        }
+
+        .image-grid[data-size="large"] {
+            --grid-min-size: 220px;
+            gap: 15px;
         }
 
         @media (max-width: 768px) {
             .image-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-size, 140px), 1fr));
                 gap: 8px;
+            }
+
+            .image-grid[data-size="small"] {
+                --grid-min-size: 120px;
+                gap: 6px;
+            }
+
+            .image-grid[data-size="medium"] {
+                --grid-min-size: 140px;
+                gap: 8px;
+            }
+
+            .image-grid[data-size="large"] {
+                --grid-min-size: 160px;
+                gap: 10px;
             }
         }
 
@@ -210,75 +263,105 @@
         .pagination {
             display: flex;
             align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+            gap: 4px;
+            flex-wrap: nowrap;
         }
 
         .pagination button {
-            padding: 6px 12px;
-            border: 1px solid #ddd;
-            background: #fff;
-            color: #555;
-            border-radius: 6px;
+            padding: 5px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.2s;
             font-weight: 500;
         }
 
         .pagination button:hover:not(:disabled) {
-            background: #667eea;
-            color: #fff;
-            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
         }
 
         .pagination button:disabled {
-            opacity: 0.4;
+            opacity: 0.3;
             cursor: not-allowed;
         }
 
         .pagination .page-numbers {
             display: flex;
-            gap: 4px;
+            gap: 3px;
         }
 
         .pagination .page-numbers button {
-            min-width: 32px;
-            padding: 6px 8px;
+            min-width: 28px;
+            padding: 4px 8px;
         }
 
         .pagination .page-numbers button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
             border-color: transparent;
-            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+            font-weight: 700;
         }
 
         .pagination .page-numbers .ellipsis {
-            padding: 6px 4px;
-            color: #999;
-            font-size: 13px;
+            padding: 4px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .header-container {
+                gap: 10px;
+            }
+
+            .header-left {
+                min-width: 250px;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 768px) {
-            .header-controls {
+            .header {
+                padding: 8px 10px;
+            }
+
+            .header-container {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 8px;
+            }
+
+            .header-left {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                min-width: auto;
             }
 
             .info-section {
                 justify-content: center;
+                flex-wrap: wrap;
             }
 
-            .pagination {
+            .header-right {
                 justify-content: center;
             }
 
             .pagination button {
-                font-size: 12px;
-                padding: 5px 10px;
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            .pagination .page-numbers button {
+                min-width: 24px;
+                padding: 3px 6px;
             }
         }
 
@@ -382,18 +465,22 @@
 </head>
 <body>
     <div class="header">
-        <h1>🖼️ 火山引擎图片浏览器</h1>
-        <div class="header-controls">
-            <div class="info-section">
-                <div class="info" id="info">加载中...</div>
-                <div class="page-size-selector">
-                    <label for="pageSize">每页显示:</label>
-                    <input type="number" id="pageSize" value="50" min="1" max="100" />
-                    <span>张</span>
+        <div class="header-container">
+            <div class="header-left">
+                <h1>🖼️ 火山引擎图片浏览器</h1>
+                <div class="info-section">
+                    <div class="info" id="info">加载中...</div>
+                    <div class="page-size-selector">
+                        <label for="pageSize">每页:</label>
+                        <input type="number" id="pageSize" value="50" min="1" max="100" />
+                        <span>张</span>
+                    </div>
                 </div>
             </div>
-            <div class="pagination" id="headerPagination">
-                <!-- 分页控件将动态生成 -->
+            <div class="header-right">
+                <div class="pagination" id="headerPagination">
+                    <!-- 分页控件将动态生成 -->
+                </div>
             </div>
         </div>
     </div>
@@ -493,8 +580,18 @@
                     return;
                 }
 
+                // 根据每页数量决定网格大小
+                let gridSize = 'medium';
+                if (pageSize <= 20) {
+                    gridSize = 'large';  // 显示较少时，图片更大
+                } else if (pageSize <= 50) {
+                    gridSize = 'medium'; // 中等数量，中等大小
+                } else {
+                    gridSize = 'small';  // 显示较多时，图片更小
+                }
+
                 // 渲染图片网格
-                let html = '<div class="image-grid">';
+                let html = `<div class="image-grid" data-size="${gridSize}">`;
                 images.forEach(img => {
                     const fileName = img.key.split('/').pop();
                     html += `

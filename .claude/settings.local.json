@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(pip install:*)",
-      "Bash(python diagnose.py:*)"
+      "Bash(python diagnose.py:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
