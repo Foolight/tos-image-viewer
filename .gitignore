@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 敏感配置（不要上传到GitHub）
+config.py
+
+# 图片数据（可以选择不上传，或者上传空文件）
+# images_data.json
+
+# 本地图片文件夹
+Images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.webp
+*.svg
+
+# 日志
+*.log
+
+# 操作系统
+.DS_Store
+Thumbs.db

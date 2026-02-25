@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>火山引擎图片浏览器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .header .info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px 20px;
+            color: #e74c3c;
+            font-size: 16px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        .image-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .image-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-item .image-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .image-item:hover .image-name {
+            opacity: 1;
+        }
+
+        /* 分页样式 */
+        .pagination {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #3498db;
+            color: #fff;
+            border-color: #3498db;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            font-size: 14px;
+            color: #666;
+            padding: 0 15px;
+        }
+
+        .pagination .page-numbers {
+            display: flex;
+            gap: 5px;
+        }
+
+        .pagination .page-numbers button {
+            min-width: 40px;
+            padding: 10px;
+        }
+
+        .pagination .page-numbers button.active {
+            background: #3498db;
+            color: #fff;
+            border-color: #3498db;
+        }
+
+        /* 图片预览弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            color: #3498db;
+        }
+
+        .modal-download {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 40px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+            z-index: 1001;
+        }
+
+        .modal-download:hover {
+            background: #2980b9;
+        }
+
+        .modal-info {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 15px;
+            border-radius: 4px;
+            z-index: 1001;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🖼️ 火山引擎图片浏览器</h1>
+        <div class="info" id="info">加载中...</div>
+    </div>
+
+    <div class="container">
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div>正在加载图片...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片预览弹窗 -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-info" id="modalInfo"></div>
+        <img class="modal-content" id="modalImage">
+        <button class="modal-download" id="downloadBtn">📥 下载图片</button>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const pageSize = 50;
+        let totalPages = 1;
+        let currentImageKey = '';
+        let currentImageUrl = '';
+
+        // 页面加载时获取图片
+        window.onload = function() {
+            loadImages(1);
+        };
+
+        // 加载图片列表
+        async function loadImages(page) {
+            try {
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div>正在加载第 ${page} 页...</div>
+                    </div>
+                `;
+
+                const response = await fetch(`/api/images?page=${page}&page_size=${pageSize}`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+
+                const { images, pagination } = result.data;
+                currentPage = pagination.current_page;
+                totalPages = pagination.total_pages;
+
+                // 更新信息栏
+                document.getElementById('info').textContent =
+                    `共 ${pagination.total} 张图片 | 第 ${currentPage}/${totalPages} 页`;
+
+                if (images.length === 0) {
+                    content.innerHTML = `
+                        <div class="empty">
+                            <div class="empty-icon">📭</div>
+                            <div>暂无图片</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // 渲染图片网格
+                let html = '<div class="image-grid">';
+                images.forEach(img => {
+                    const fileName = img.key.split('/').pop();
+                    html += `
+                        <div class="image-item" onclick="openModal('${img.key}', '${img.url}', '${fileName}')">
+                            <img src="${img.url}" alt="${fileName}" loading="lazy">
+                            <div class="image-name">${fileName}</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                // 添加分页控件
+                html += renderPagination(pagination);
+
+                content.innerHTML = html;
+
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        ❌ 加载失败: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 渲染分页控件
+        function renderPagination(pagination) {
+            const { current_page, total_pages, has_prev, has_next } = pagination;
+
+            let html = '<div class="pagination">';
+
+            // 上一页按钮
+            html += `<button onclick="loadImages(${current_page - 1})" ${!has_prev ? 'disabled' : ''}>
+                上一页
+            </button>`;
+
+            // 页码按钮
+            html += '<div class="page-numbers">';
+
+            // 计算显示的页码范围
+            let startPage = Math.max(1, current_page - 2);
+            let endPage = Math.min(total_pages, current_page + 2);
+
+            // 第一页
+            if (startPage > 1) {
+                html += `<button onclick="loadImages(1)">1</button>`;
+                if (startPage > 2) {
+                    html += `<span style="padding: 10px">...</span>`;
+                }
+            }
+
+            // 中间页码
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button onclick="loadImages(${i})" class="${i === current_page ? 'active' : ''}">${i}</button>`;
+            }
+
+            // 最后一页
+            if (endPage < total_pages) {
+                if (endPage < total_pages - 1) {
+                    html += `<span style="padding: 10px">...</span>`;
+                }
+                html += `<button onclick="loadImages(${total_pages})">${total_pages}</button>`;
+            }
+
+            html += '</div>';
+
+            // 页面信息
+            html += `<div class="page-info">第 ${current_page} / ${total_pages} 页</div>`;
+
+            // 下一页按钮
+            html += `<button onclick="loadImages(${current_page + 1})" ${!has_next ? 'disabled' : ''}>
+                下一页
+            </button>`;
+
+            html += '</div>';
+
+            return html;
+        }
+
+        // 打开图片预览
+        function openModal(key, url, fileName) {
+            currentImageKey = key;
+            currentImageUrl = url;
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalInfo = document.getElementById('modalInfo');
+
+            modal.classList.add('show');
+            modalImg.src = url;
+            modalInfo.textContent = fileName;
+        }
+
+        // 关闭图片预览
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+        }
+
+        // 点击背景关闭
+        document.getElementById('imageModal').onclick = function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        };
+
+        // ESC键关闭
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 下载图片
+        document.getElementById('downloadBtn').onclick = function(event) {
+            event.stopPropagation();
+
+            try {
+                // 直接使用图片URL下载
+                const a = document.createElement('a');
+                a.href = currentImageUrl;
+                a.download = currentImageKey.split('/').pop();
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (error) {
+                alert('下载失败: ' + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
