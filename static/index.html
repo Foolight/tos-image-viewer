@@ -15,12 +15,14 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: #f5f5f5;
             color: #333;
-            padding-bottom: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 10px 15px;
+            padding: 8px 10px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
@@ -111,9 +113,22 @@
         }
 
         .container {
-            max-width: 1600px;
-            margin: 15px auto;
-            padding: 0 15px;
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+        }
+
+        .container.align-top {
+            align-items: flex-start;
+        }
+
+        #content {
+            width: 100%;
         }
 
         .loading {
@@ -122,6 +137,11 @@
             font-size: 15px;
             color: #666;
             font-weight: 500;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .spinner {
@@ -149,29 +169,119 @@
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
-            margin: 20px 0;
+            margin: 20px auto;
+            max-width: 600px;
         }
 
         .image-grid {
             display: grid;
             gap: 12px;
             grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-size, 180px), 1fr));
+            width: 100%;
+            justify-items: center;
         }
 
-        /* 根据每页数量自动调整网格大小 */
-        .image-grid[data-size="small"] {
-            --grid-min-size: 150px;
-            gap: 10px;
+        /* 根据实际图片数量自动调整网格大小 */
+        /* 单张图片：超大显示，填满页面 */
+        .image-grid[data-size="single"] {
+            --grid-min-size: min(95vw, 1600px);
+            gap: 0;
+            justify-content: center;
+            max-width: 1800px;
+            margin: 0 auto;
         }
 
+        .image-grid[data-size="single"] .image-item {
+            width: 100%;
+        }
+
+        /* 2-3张：很大 */
+        .image-grid[data-size="xlarge"] {
+            --grid-min-size: 550px;
+            gap: 20px;
+            justify-content: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .image-grid[data-size="xlarge"] .image-item {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* 4-6张：大 */
+        .image-grid[data-size="large"] {
+            --grid-min-size: 400px;
+            gap: 18px;
+            justify-content: center;
+        }
+
+        .image-grid[data-size="large"] .image-item {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        /* 7-12张：中大 */
+        .image-grid[data-size="medium-large"] {
+            --grid-min-size: 300px;
+            gap: 15px;
+        }
+
+        .image-grid[data-size="medium-large"] .image-item {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* 13-30张：中等 */
         .image-grid[data-size="medium"] {
-            --grid-min-size: 180px;
+            --grid-min-size: 240px;
             gap: 12px;
         }
 
-        .image-grid[data-size="large"] {
-            --grid-min-size: 220px;
-            gap: 15px;
+        .image-grid[data-size="medium"] .image-item {
+            width: 100%;
+        }
+
+        /* 31-60张：中小 */
+        .image-grid[data-size="medium-small"] {
+            --grid-min-size: 200px;
+            gap: 10px;
+        }
+
+        .image-grid[data-size="medium-small"] .image-item {
+            width: 100%;
+        }
+
+        /* 60+张：小 */
+        .image-grid[data-size="small"] {
+            --grid-min-size: 160px;
+            gap: 10px;
+        }
+
+        .image-grid[data-size="small"] .image-item {
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .image-grid[data-size="single"] {
+                --grid-min-size: 92vw;
+            }
+
+            .image-grid[data-size="xlarge"] {
+                --grid-min-size: 480px;
+            }
+
+            .image-grid[data-size="xlarge"] .image-item {
+                max-width: 650px;
+            }
+
+            .image-grid[data-size="large"] {
+                --grid-min-size: 350px;
+            }
+
+            .image-grid[data-size="large"] .image-item {
+                max-width: 500px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -180,19 +290,64 @@
                 gap: 8px;
             }
 
-            .image-grid[data-size="small"] {
-                --grid-min-size: 120px;
-                gap: 6px;
+            .image-grid[data-size="single"] {
+                --grid-min-size: 96vw;
+                gap: 0;
             }
 
-            .image-grid[data-size="medium"] {
-                --grid-min-size: 140px;
-                gap: 8px;
+            .image-grid[data-size="single"] .image-item {
+                min-height: 250px;
+                max-height: calc(100vh - 120px);
+            }
+
+            .image-grid[data-size="single"] .image-item img {
+                max-height: calc(100vh - 120px);
+            }
+
+            .image-grid[data-size="xlarge"] {
+                --grid-min-size: 85vw;
+                gap: 12px;
+            }
+
+            .image-grid[data-size="xlarge"] .image-item {
+                max-width: 95vw;
             }
 
             .image-grid[data-size="large"] {
-                --grid-min-size: 160px;
+                --grid-min-size: 280px;
                 gap: 10px;
+            }
+
+            .image-grid[data-size="large"] .image-item {
+                max-width: none;
+            }
+
+            .image-grid[data-size="medium-large"] {
+                --grid-min-size: 220px;
+                gap: 10px;
+            }
+
+            .image-grid[data-size="medium-large"] .image-item {
+                max-width: none;
+            }
+
+            .image-grid[data-size="medium"] {
+                --grid-min-size: 180px;
+                gap: 8px;
+            }
+
+            .image-grid[data-size="medium-small"] {
+                --grid-min-size: 150px;
+                gap: 8px;
+            }
+
+            .image-grid[data-size="small"] {
+                --grid-min-size: 130px;
+                gap: 6px;
+            }
+
+            .container {
+                padding: 6px;
             }
         }
 
@@ -207,9 +362,38 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* 单张图片时的特殊样式 */
+        .image-grid[data-size="single"] .image-item {
+            aspect-ratio: auto;
+            max-height: calc(100vh - 150px);
+            min-height: 400px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-grid[data-size="single"] .image-item img {
+            object-fit: contain;
+            max-height: calc(100vh - 150px);
+            width: auto;
+            height: auto;
+        }
+
+        /* 2-3张图片时的特殊样式 */
+        .image-grid[data-size="xlarge"] .image-item {
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
         .image-item:hover {
             transform: translateY(-6px) scale(1.02);
             box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        }
+
+        .image-grid[data-size="single"] .image-item:hover {
+            transform: translateY(-4px) scale(1.01);
         }
 
         .image-item::before {
@@ -329,13 +513,13 @@
 
         @media (max-width: 768px) {
             .header {
-                padding: 8px 10px;
+                padding: 6px 8px;
             }
 
             .header-container {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
+                gap: 6px;
             }
 
             .header-left {
@@ -362,6 +546,10 @@
             .pagination .page-numbers button {
                 min-width: 24px;
                 padding: 3px 6px;
+            }
+
+            .container {
+                padding: 10px;
             }
         }
 
@@ -453,7 +641,8 @@
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin: 20px 0;
+            margin: 20px auto;
+            max-width: 600px;
         }
 
         .empty-icon {
@@ -520,6 +709,9 @@
 
         // 页面加载时获取图片
         window.onload = function() {
+            // 初始状态垂直居中
+            document.querySelector('.container').classList.remove('align-top');
+
             loadImages(1);
 
             // 监听每页数量变化
@@ -577,17 +769,29 @@
                             <div>暂无图片</div>
                         </div>
                     `;
+                    // 空状态时垂直居中
+                    document.querySelector('.container').classList.remove('align-top');
                     return;
                 }
 
-                // 根据每页数量决定网格大小
+                // 根据实际显示的图片数量决定网格大小
+                const imageCount = images.length;
                 let gridSize = 'medium';
-                if (pageSize <= 20) {
-                    gridSize = 'large';  // 显示较少时，图片更大
-                } else if (pageSize <= 50) {
-                    gridSize = 'medium'; // 中等数量，中等大小
+
+                if (imageCount === 1) {
+                    gridSize = 'single';        // 单张：超大，填满页面
+                } else if (imageCount <= 3) {
+                    gridSize = 'xlarge';        // 2-3张：很大
+                } else if (imageCount <= 6) {
+                    gridSize = 'large';         // 4-6张：大
+                } else if (imageCount <= 12) {
+                    gridSize = 'medium-large';  // 7-12张：中大
+                } else if (imageCount <= 30) {
+                    gridSize = 'medium';        // 13-30张：中等
+                } else if (imageCount <= 60) {
+                    gridSize = 'medium-small';  // 31-60张：中小
                 } else {
-                    gridSize = 'small';  // 显示较多时，图片更小
+                    gridSize = 'small';         // 60+张：小
                 }
 
                 // 渲染图片网格
@@ -605,6 +809,16 @@
 
                 content.innerHTML = html;
 
+                // 根据图片数量决定容器对齐方式
+                const container = document.querySelector('.container');
+                if (imageCount > 12) {
+                    // 图片较多时，顶部对齐
+                    container.classList.add('align-top');
+                } else {
+                    // 图片较少时，垂直居中
+                    container.classList.remove('align-top');
+                }
+
                 // 滚动到顶部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -615,6 +829,8 @@
                     </div>
                 `;
                 document.getElementById('headerPagination').innerHTML = '';
+                // 错误状态时垂直居中
+                document.querySelector('.container').classList.remove('align-top');
             }
         }
 
