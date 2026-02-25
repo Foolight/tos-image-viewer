@@ -15,53 +15,103 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: #f5f5f5;
             color: #333;
-            padding-bottom: 80px;
+            padding-bottom: 20px;
         }
 
         .header {
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .header h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .header .info {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .page-size-selector label {
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .page-size-selector input {
+            width: 70px;
+            padding: 6px 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .page-size-selector input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .container {
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
+            max-width: 1600px;
+            margin: 15px auto;
+            padding: 0 15px;
         }
 
         .loading {
             text-align: center;
-            padding: 60px 20px;
-            font-size: 16px;
+            padding: 80px 20px;
+            font-size: 15px;
             color: #666;
+            font-weight: 500;
         }
 
         .spinner {
             display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            width: 48px;
+            height: 48px;
+            border: 5px solid rgba(102, 126, 234, 0.1);
+            border-top: 5px solid #667eea;
+            border-right: 5px solid #764ba2;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 20px;
         }
 
         @keyframes spin {
@@ -71,45 +121,67 @@
 
         .error {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: #e74c3c;
-            font-size: 16px;
+            font-size: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
+            margin: 20px 0;
         }
 
         .image-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
         }
 
         @media (max-width: 768px) {
             .image-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 10px;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 8px;
             }
         }
 
         .image-item {
             position: relative;
             aspect-ratio: 1;
-            background: #fff;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .image-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        }
+
+        .image-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+
+        .image-item:hover::before {
+            opacity: 1;
         }
 
         .image-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            position: relative;
+            z-index: 0;
         }
 
         .image-item .image-name {
@@ -117,15 +189,17 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0,0,0,0.7);
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 80%, transparent 100%);
             color: #fff;
-            padding: 8px;
+            padding: 12px 10px 10px;
             font-size: 12px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity 0.3s;
+            z-index: 2;
+            font-weight: 500;
         }
 
         .image-item:hover .image-name {
@@ -134,59 +208,78 @@
 
         /* 分页样式 */
         .pagination {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             display: flex;
-            justify-content: center;
             align-items: center;
+            gap: 6px;
             flex-wrap: wrap;
-            gap: 10px;
         }
 
         .pagination button {
-            padding: 10px 20px;
+            padding: 6px 12px;
             border: 1px solid #ddd;
             background: #fff;
-            color: #333;
-            border-radius: 4px;
+            color: #555;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.2s;
+            font-weight: 500;
         }
 
         .pagination button:hover:not(:disabled) {
-            background: #3498db;
+            background: #667eea;
             color: #fff;
-            border-color: #3498db;
+            border-color: #667eea;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
         }
 
         .pagination button:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
-        }
-
-        .pagination .page-info {
-            font-size: 14px;
-            color: #666;
-            padding: 0 15px;
         }
 
         .pagination .page-numbers {
             display: flex;
-            gap: 5px;
+            gap: 4px;
         }
 
         .pagination .page-numbers button {
-            min-width: 40px;
-            padding: 10px;
+            min-width: 32px;
+            padding: 6px 8px;
         }
 
         .pagination .page-numbers button.active {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
-            border-color: #3498db;
+            border-color: transparent;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+        }
+
+        .pagination .page-numbers .ellipsis {
+            padding: 6px 4px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .info-section {
+                justify-content: center;
+            }
+
+            .pagination {
+                justify-content: center;
+            }
+
+            .pagination button {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
         }
 
         /* 图片预览弹窗 */
@@ -271,21 +364,38 @@
 
         .empty {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: #999;
-            font-size: 16px;
+            font-size: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin: 20px 0;
         }
 
         .empty-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
+            font-size: 72px;
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🖼️ 火山引擎图片浏览器</h1>
-        <div class="info" id="info">加载中...</div>
+        <div class="header-controls">
+            <div class="info-section">
+                <div class="info" id="info">加载中...</div>
+                <div class="page-size-selector">
+                    <label for="pageSize">每页显示:</label>
+                    <input type="number" id="pageSize" value="50" min="1" max="100" />
+                    <span>张</span>
+                </div>
+            </div>
+            <div class="pagination" id="headerPagination">
+                <!-- 分页控件将动态生成 -->
+            </div>
+        </div>
     </div>
 
     <div class="container">
@@ -307,19 +417,46 @@
 
     <script>
         let currentPage = 1;
-        const pageSize = 50;
         let totalPages = 1;
         let currentImageKey = '';
         let currentImageUrl = '';
 
+        // 获取当前每页显示数量
+        function getPageSize() {
+            const input = document.getElementById('pageSize');
+            let value = parseInt(input.value) || 50;
+            // 限制范围在1-100
+            value = Math.max(1, Math.min(100, value));
+            input.value = value;
+            return value;
+        }
+
         // 页面加载时获取图片
         window.onload = function() {
             loadImages(1);
+
+            // 监听每页数量变化
+            const pageSizeInput = document.getElementById('pageSize');
+            let debounceTimer;
+
+            pageSizeInput.addEventListener('change', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    loadImages(1); // 修改每页数量后回到第一页
+                }, 300);
+            });
+
+            pageSizeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loadImages(1);
+                }
+            });
         };
 
         // 加载图片列表
         async function loadImages(page) {
             try {
+                const pageSize = getPageSize();
                 const content = document.getElementById('content');
                 content.innerHTML = `
                     <div class="loading">
@@ -339,9 +476,12 @@
                 currentPage = pagination.current_page;
                 totalPages = pagination.total_pages;
 
-                // 更新信息栏
+                // 更新信息栏和分页控件
                 document.getElementById('info').textContent =
                     `共 ${pagination.total} 张图片 | 第 ${currentPage}/${totalPages} 页`;
+
+                // 在页眉显示分页控件
+                document.getElementById('headerPagination').innerHTML = renderPagination(pagination);
 
                 if (images.length === 0) {
                     content.innerHTML = `
@@ -366,9 +506,6 @@
                 });
                 html += '</div>';
 
-                // 添加分页控件
-                html += renderPagination(pagination);
-
                 content.innerHTML = html;
 
                 // 滚动到顶部
@@ -380,6 +517,7 @@
                         ❌ 加载失败: ${error.message}
                     </div>
                 `;
+                document.getElementById('headerPagination').innerHTML = '';
             }
         }
 
@@ -387,12 +525,10 @@
         function renderPagination(pagination) {
             const { current_page, total_pages, has_prev, has_next } = pagination;
 
-            let html = '<div class="pagination">';
+            let html = '';
 
             // 上一页按钮
-            html += `<button onclick="loadImages(${current_page - 1})" ${!has_prev ? 'disabled' : ''}>
-                上一页
-            </button>`;
+            html += `<button onclick="loadImages(${current_page - 1})" ${!has_prev ? 'disabled' : ''}>◀</button>`;
 
             // 页码按钮
             html += '<div class="page-numbers">';
@@ -405,7 +541,7 @@
             if (startPage > 1) {
                 html += `<button onclick="loadImages(1)">1</button>`;
                 if (startPage > 2) {
-                    html += `<span style="padding: 10px">...</span>`;
+                    html += `<span class="ellipsis">...</span>`;
                 }
             }
 
@@ -417,22 +553,15 @@
             // 最后一页
             if (endPage < total_pages) {
                 if (endPage < total_pages - 1) {
-                    html += `<span style="padding: 10px">...</span>`;
+                    html += `<span class="ellipsis">...</span>`;
                 }
                 html += `<button onclick="loadImages(${total_pages})">${total_pages}</button>`;
             }
 
             html += '</div>';
 
-            // 页面信息
-            html += `<div class="page-info">第 ${current_page} / ${total_pages} 页</div>`;
-
             // 下一页按钮
-            html += `<button onclick="loadImages(${current_page + 1})" ${!has_next ? 'disabled' : ''}>
-                下一页
-            </button>`;
-
-            html += '</div>';
+            html += `<button onclick="loadImages(${current_page + 1})" ${!has_next ? 'disabled' : ''}>▶</button>`;
 
             return html;
         }
